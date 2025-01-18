@@ -87,7 +87,12 @@ class ApiController extends Controller {
         }
     }
 
-    private function update($table, $id, $data) {
+    private function update($table, $id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data) {
+            $this->respond(['error' => 'Datos no proporcionados'], 400);
+            return;
+        }
         $idColumn = $this->getIdColumn($table);
         if (!$idColumn) {
             $this->respond(['error' => "No se encontró una columna de ID en la tabla '$table'"], 400);
