@@ -119,8 +119,12 @@ class ApiController extends Controller {
             return;
         }
     
-        $params = array_merge([$types], $values, [$id]); // Combina tipos, valores y el ID
-        call_user_func_array([$stmt, 'bind_param'], $params);
+        $params = array_merge([$types], $values, [$id]);
+        $params_ref = [];
+        foreach ($params as $key => $value) {
+            $params_ref[$key] = &$params[$key];
+        }
+        call_user_func_array([$stmt, 'bind_param'], $params_ref);
     
         if ($stmt->execute()) {
             $this->respond(['mensaje' => 'Registro actualizado']);
