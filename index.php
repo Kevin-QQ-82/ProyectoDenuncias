@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+
 require_once "./controllers/ApiController.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -24,4 +25,13 @@ if ($table) {
 } else {
     //http_response_code(404);
     echo json_encode(['error' => 'Recurso no encontrado']);
+}
+$authController = new AuthController();
+
+if ($path === 'login' && $method === 'POST') {
+    $authController->login();
+} elseif ($path === 'register' && $method === 'POST') {
+    $authController->register();
+} else {
+    echo json_encode(['error' => 'Ruta no encontrada']);
 }
